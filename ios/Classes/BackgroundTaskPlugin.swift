@@ -104,6 +104,7 @@ public class BackgroundTaskPlugin: NSObject, FlutterPlugin, CLLocationManagerDel
             } else {
                 desiredAccuracy = .reduced
             }
+            let showsBackgroundLocationIndicator = (args?["showsBackgroundLocationIndicator"] as? Bool) ?? false
             let isEnabledEvenIfKilled = (args?["isEnabledEvenIfKilled"] as? Bool) ?? false
             
             let userDefaultsRepository = UserDefaultsRepository.instance
@@ -125,7 +126,7 @@ public class BackgroundTaskPlugin: NSObject, FlutterPlugin, CLLocationManagerDel
           
             let locationManager = CLLocationManager()
             locationManager.allowsBackgroundLocationUpdates = true
-            locationManager.showsBackgroundLocationIndicator = true
+            locationManager.showsBackgroundLocationIndicator = showsBackgroundLocationIndicator
             locationManager.pausesLocationUpdatesAutomatically = pausesLocationUpdatesAutomatically
             locationManager.desiredAccuracy = desiredAccuracy.kCLLocation
             locationManager.distanceFilter = distanceFilter

@@ -79,6 +79,7 @@ class BackgroundTask {
     bool isEnabledEvenIfKilled = true,
     double updateIntervalInMilliseconds = 1000,
     DesiredAccuracy iOSDesiredAccuracy = DesiredAccuracy.bestForNavigation,
+    bool showsBackgroundLocationIndicator = false,
     AndroidDesiredAccuracy androidDesiredAccuracy =
         AndroidDesiredAccuracy.priorityBalancedPowerAccuracy,
   }) async {
@@ -91,6 +92,7 @@ class BackgroundTask {
         'isEnabledEvenIfKilled': isEnabledEvenIfKilled,
         'updateIntervalInMilliseconds': updateIntervalInMilliseconds,
         'iOSDesiredAccuracy': iOSDesiredAccuracy.value,
+        'showsBackgroundLocationIndicator': showsBackgroundLocationIndicator,
         'androidDesiredAccuracy': androidDesiredAccuracy.value,
       },
     );
