@@ -169,10 +169,12 @@ class BackgroundTaskPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, Plu
     return true
   }
 
-  private val locationObserver = Observer<Pair<Double?, Double?>> {
+  private val locationObserver = Observer<LocationData> {
     val data = HashMap<String, Any?>()
-    data["lat"] = it.first
-    data["lng"] = it.second
+    data["lat"] = it.lat
+    data["lng"] = it.lng
+    data["speed"] = it.speed
+    data["time"] = it.time
     BgEventStreamHandler.eventSink?.success(data)
   }
 

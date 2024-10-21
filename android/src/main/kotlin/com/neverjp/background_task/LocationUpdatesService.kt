@@ -58,6 +58,13 @@ import io.flutter.embedding.engine.loader.FlutterLoader
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.view.FlutterCallbackInformation
 
+data class LocationData(
+    val lat: Double?,
+    val lng: Double?,
+    val speed: Float?,
+    val time: Double?
+)
+
 class LocationUpdatesService: Service() {
 
     private val binder = LocalBinder()
@@ -97,8 +104,8 @@ class LocationUpdatesService: Service() {
         var isRunning: Boolean = false
             private set
 
-        private val _locationLiveData = MutableLiveData<Pair<Double?, Double?>>()
-        val locationLiveData: LiveData<Pair<Double?, Double?>> = _locationLiveData
+        private val _locationLiveData = MutableLiveData<LocationData>()
+        val locationLiveData: LiveData<LocationData> = _locationLiveData
 
         val statusLiveData = MutableLiveData<String>()
 
@@ -181,8 +188,11 @@ class LocationUpdatesService: Service() {
                     val newLastLocation = locationResult.lastLocation
                     val lat = newLastLocation?.latitude
                     val lng = newLastLocation?.longitude
-                    val value = "lat:${lat ?: 0} lng:${lng ?: 0}"
-                    _locationLiveData.value = Pair(lat, lng)
+                    val speed = newLastLocation?.speed
+                    val time = newLastLocation?.time?.toDouble()
+
+                    val value = "lat:${lat ?: 0} lng:${lng ?: 0} speed:${speed ?: 0} time:${time ?: 0}"
+                    _locationLiveData.value = LocationData(lat = lat, lng = lng, speed = speed, time = time)
                     statusLiveData.value = StatusEventStreamHandler.StatusType.Updated(value).value
 
                     pref.getLong(callbackHandlerRawHandleKey, 0).also {
@@ -191,6 +201,8 @@ class LocationUpdatesService: Service() {
                             args["callbackHandlerRawHandle"] = it
                             args["lat"] = lat ?: 0
                             args["lng"] = lng ?: 0
+                            args["speed"] = speed ?: 0
+                            args["time"] = time ?: 0
                             methodChannel?.invokeMethod("background_handler", args)
                         }
                     }

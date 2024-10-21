@@ -1,5 +1,25 @@
+import 'package:flutter/foundation.dart';
+
 /// `Location` is a type representing latitude and longitude.
-typedef Location = ({double? lat, double? lng});
+// typedef Location = ({double? lat, double? lng});
+@immutable
+class Location {
+  const Location({this.lat, this.lng, this.speed, this.time});
+
+  factory Location.fromJson(Map<dynamic, dynamic> json) {
+    return Location(
+      lat: json['lat'] as double?,
+      lng: json['lng'] as double?,
+      speed: json['speed'] as double?,
+      time: json['time'] as double?,
+    );
+  }
+
+  final double? lat;
+  final double? lng;
+  final double? speed;
+  final double? time;
+}
 
 /// `StatusEvent` is a type representing a status event.
 typedef StatusEvent = ({StatusEventType status, String? message});

@@ -112,9 +112,7 @@ class BackgroundTask {
   Stream<Location> get stream =>
       _bgEventChannel.receiveBroadcastStream().map((event) {
         final json = event as Map;
-        final lat = json['lat'] as double?;
-        final lng = json['lng'] as double?;
-        return (lat: lat, lng: lng);
+        return Location.fromJson(json);
       }).asBroadcastStream();
 
   /// `status` provides a stream of status events.
