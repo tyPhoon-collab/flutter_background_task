@@ -19,10 +19,7 @@ void callbackDispatcher() {
           final callback = PluginUtilities.getCallbackFromHandle(
             CallbackHandle.fromRawHandle(handle),
           );
-          final data = (
-            lat: json['lat'] as double?,
-            lng: json['lng'] as double?,
-          );
+          final data = Location.fromJson(json['data'] as Map);
           callback?.call(data);
         }
       }
