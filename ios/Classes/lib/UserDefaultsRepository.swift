@@ -15,6 +15,7 @@ struct UserDefaultsRepository {
         case isEnabledEvenIfKilled = "com.neverjp.background_task.isEnabledEvenIfKilled"
         case desiredAccuracy = "com.neverjp.background_task.desiredAccuracy"
         case pausesLocationUpdatesAutomatically = "com.neverjp.background_task.pausesLocationUpdatesAutomatically"
+        case showsBackgroundLocationIndicator = "com.neverjp.background_task.showsBackgroundLocationIndicator"
         case callbackDispatcherRawHandle = "com.neverjp.background_task.callbackDispatcherRawHandle"
         case callbackHandlerRawHandle = "com.neverjp.background_task.callbackHandlerRawHandle"
         var value: String {
@@ -25,11 +26,13 @@ struct UserDefaultsRepository {
     func save(
         distanceFilter: Double,
         desiredAccuracy: BackgroundTaskPlugin.DesiredAccuracy,
-        pausesLocationUpdatesAutomatically: Bool
+        pausesLocationUpdatesAutomatically: Bool,
+        showsBackgroundLocationIndicator: Bool
     ) {
         UserDefaults.standard.setValue(distanceFilter, forKey: Self.Key.distanceFilter.value)
         UserDefaults.standard.setValue(desiredAccuracy.rawValue, forKey: Self.Key.desiredAccuracy.value)
         UserDefaults.standard.setValue(pausesLocationUpdatesAutomatically, forKey: Self.Key.pausesLocationUpdatesAutomatically.value)
+        UserDefaults.standard.setValue(showsBackgroundLocationIndicator, forKey: Self.Key.showsBackgroundLocationIndicator.value)
     }
     
     func save(callbackDispatcherRawHandle: Int, callbackHandlerRawHandle: Int) {
@@ -41,17 +44,18 @@ struct UserDefaultsRepository {
         UserDefaults.standard.setValue(isEnabledEvenIfKilled, forKey: Self.Key.isEnabledEvenIfKilled.value)
     }
     
-    func fetch() -> (distanceFilter: Double, desiredAccuracy: BackgroundTaskPlugin.DesiredAccuracy, pausesLocationUpdatesAutomatically: Bool) {
+    func fetch() -> (distanceFilter: Double, desiredAccuracy: BackgroundTaskPlugin.DesiredAccuracy, pausesLocationUpdatesAutomatically: Bool, showsBackgroundLocationIndicator: Bool) {
         let distanceFilter = UserDefaults.standard.double(forKey: Self.Key.distanceFilter.value)
         let desiredAccuracy: BackgroundTaskPlugin.DesiredAccuracy
         let pausesLocationUpdatesAutomatically = UserDefaults.standard.bool(forKey: Self.Key.pausesLocationUpdatesAutomatically.value)
+        let showsBackgroundLocationIndicator = UserDefaults.standard.bool(forKey: Self.Key.showsBackgroundLocationIndicator.value)
         if let rawValue = UserDefaults.standard.string(forKey: Self.Key.desiredAccuracy.value),
             let data = BackgroundTaskPlugin.DesiredAccuracy(rawValue: rawValue)  {
             desiredAccuracy = data
         } else {
             desiredAccuracy = BackgroundTaskPlugin.DesiredAccuracy.reduced
         }
-        return (distanceFilter: distanceFilter, desiredAccuracy: desiredAccuracy, pausesLocationUpdatesAutomatically: pausesLocationUpdatesAutomatically)
+        return (distanceFilter: distanceFilter, desiredAccuracy: desiredAccuracy, pausesLocationUpdatesAutomatically: pausesLocationUpdatesAutomatically, showsBackgroundLocationIndicator: showsBackgroundLocationIndicator)
     }
     
     func fetchIsEnabledEvenIfKilled() -> Bool {
